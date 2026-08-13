@@ -84,6 +84,12 @@ html, body {
     gap: 8px;
 }
 
+.header-logo-img {
+    height: 38px;
+    width: auto;
+    object-fit: contain;
+}
+
 .logo-text {
     font-size: 22px;
     font-weight: 800;
