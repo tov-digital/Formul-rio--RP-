@@ -88,25 +88,40 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Step 2: Idade
-    const inputAge = document.getElementById('inputAge');
+    // Step 2: Data de Nascimento
+    const inputBirthDate = document.getElementById('inputBirthDate');
     const btnStep2Next = document.getElementById('btnStep2Next');
 
+    if (inputBirthDate) {
+        // Mask DD/MM/AAAA
+        inputBirthDate.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 8) value = value.slice(0, 8);
+
+            if (value.length > 4) {
+                value = `${value.slice(0, 2)}/${value.slice(2, 4)}/${value.slice(4)}`;
+            } else if (value.length > 2) {
+                value = `${value.slice(0, 2)}/${value.slice(2)}`;
+            }
+            e.target.value = value;
+        });
+
+        inputBirthDate.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                btnStep2Next.click();
+            }
+        });
+    }
+
     btnStep2Next.addEventListener('click', () => {
-        const ageVal = inputAge.value.trim();
-        if (!ageVal) {
-            alert('Por favor, informe sua idade.');
-            inputAge.focus();
+        const dateVal = inputBirthDate ? inputBirthDate.value.trim() : '';
+        if (!dateVal || dateVal.length < 10) {
+            alert('Por favor, informe sua data de nascimento completa (DD/MM/AAAA).');
+            if (inputBirthDate) inputBirthDate.focus();
             return;
         }
-        formData.age = ageVal;
+        formData.birthDate = dateVal;
         goToStep(3);
-    });
-
-    inputAge.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            btnStep2Next.click();
-        }
     });
 
     // Step 3: INSS Options
@@ -217,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Step 10: Restart Form
     document.getElementById('btnRestart').addEventListener('click', () => {
         // Reset inputs
-        inputAge.value = '';
+        if (inputBirthDate) inputBirthDate.value = '';
         inputContributionYears.value = '';
         inputName.value = '';
         inputPhone.value = '';
