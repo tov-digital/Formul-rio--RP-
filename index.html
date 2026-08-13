@@ -173,27 +173,8 @@
                 </div>
             </div>
 
-            <!-- STEP 4: QUANTOS ANOS CONTRIBUIU -->
+            <!-- STEP 4: FORMA DE TRABALHO -->
             <div class="step-screen" id="step4">
-                <div class="form-card">
-                    <h2 class="question-title">Quantos anos você contribuiu com o INSS?</h2>
-                    
-                    <div class="input-floating-group">
-                        <fieldset class="input-fieldset">
-                            <input type="number" id="inputContributionYears" class="form-input" placeholder="Exemplo: 30" min="0" max="80">
-                        </fieldset>
-                    </div>
-
-                    <p class="subtext-note">
-                        Caso não saiba, digite um tempo <strong class="highlight-blue">aproximado.</strong>
-                    </p>
-
-                    <button class="btn-blue btn-full margin-top-md" id="btnStep4Next">Continuar</button>
-                </div>
-            </div>
-
-            <!-- STEP 5: FORMA DE TRABALHO -->
-            <div class="step-screen" id="step5">
                 <div class="form-card">
                     <h2 class="question-title">Qual forma de trabalho você exerceu por mais tempo?</h2>
 
@@ -246,6 +227,25 @@
                 </div>
             </div>
 
+            <!-- STEP 5: QUANTOS ANOS CONTRIBUIU -->
+            <div class="step-screen" id="step5">
+                <div class="form-card">
+                    <h2 class="question-title">Quantos anos você contribuiu com o INSS?</h2>
+                    
+                    <div class="input-floating-group">
+                        <fieldset class="input-fieldset">
+                            <input type="number" id="inputContributionYears" class="form-input" placeholder="Exemplo: 30" min="0" max="80">
+                        </fieldset>
+                    </div>
+
+                    <p class="subtext-note">
+                        Caso não saiba, digite um tempo <strong class="highlight-blue">aproximado.</strong>
+                    </p>
+
+                    <button class="btn-blue btn-full margin-top-md" id="btnStep5Next">Continuar</button>
+                </div>
+            </div>
+
             <!-- STEP 6: ATIVIDADE ESPECIAL -->
             <div class="step-screen" id="step6">
                 <div class="form-card">
@@ -286,62 +286,8 @@
                 </div>
             </div>
 
-            <!-- STEP 7: QUANTO GANHA ATUALMENTE -->
+            <!-- STEP 7: TENTOU APOSENTAR ANTES -->
             <div class="step-screen" id="step7">
-                <div class="form-card">
-                    <h2 class="question-title">Quanto você ganha atualmente?</h2>
-
-                    <div class="options-list">
-                        <button class="option-btn simple-option" data-income="ate-2k">
-                            <span class="arrow-icon border-arrow">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                    <polyline points="9 18 15 12 9 6"/>
-                                </svg>
-                            </span>
-                            <span class="option-label">Até 2 mil reais</span>
-                        </button>
-
-                        <button class="option-btn simple-option" data-income="2k-5k">
-                            <span class="arrow-icon border-arrow">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                    <polyline points="9 18 15 12 9 6"/>
-                                </svg>
-                            </span>
-                            <span class="option-label">Entre 2 mil e 5 mil</span>
-                        </button>
-
-                        <button class="option-btn simple-option" data-income="5k-8k">
-                            <span class="arrow-icon border-arrow">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                    <polyline points="9 18 15 12 9 6"/>
-                                </svg>
-                            </span>
-                            <span class="option-label">Entre 5 mil e 8 mil</span>
-                        </button>
-
-                        <button class="option-btn simple-option" data-income="acima-8k">
-                            <span class="arrow-icon border-arrow">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                    <polyline points="9 18 15 12 9 6"/>
-                                </svg>
-                            </span>
-                            <span class="option-label">Acima de 8 mil</span>
-                        </button>
-
-                        <button class="option-btn simple-option" data-income="sem-renda">
-                            <span class="arrow-icon border-arrow">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                    <polyline points="9 18 15 12 9 6"/>
-                                </svg>
-                            </span>
-                            <span class="option-label">Não tenho renda</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- STEP 8: TENTOU APOSENTAR ANTES -->
-            <div class="step-screen" id="step8">
                 <div class="form-card">
                     <h2 class="question-title">Para finalizar, você já tentou aposentar antes?</h2>
 
@@ -373,6 +319,24 @@
                             <span class="option-label">Sim - mas foi negada pelo INSS.</span>
                         </button>
                     </div>
+                </div>
+            </div>
+
+            <!-- STEP 8: TELA DE CARREGAMENTO -->
+            <div class="step-screen" id="step8">
+                <div class="form-card loading-card-wrapper">
+                    <div class="loading-status-header">
+                        <span class="loading-title-text">Processando informações enviadas...</span>
+                        <span class="loading-percent-text" id="loadingPercentText">0%</span>
+                    </div>
+
+                    <div class="loading-bar-track">
+                        <div class="loading-bar-fill" id="loadingBarFill"></div>
+                    </div>
+
+                    <p class="loading-subtext">
+                        <strong>Nosso time de especialistas</strong> está analisando...
+                    </p>
                 </div>
             </div>
 

@@ -1,27 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Form Data State
     const formData = {
-        age: '',
         gender: '',
+        birthDate: '',
         inssContribution: '',
-        contributionYears: '',
         workType: '',
+        contributionYears: '',
         specialActivity: '',
-        income: '',
         previousAttempt: '',
         name: '',
         phone: ''
     };
 
     let currentStep = 0;
-    const totalSteps = 9; // Steps 1 to 9 (Step 10 is success screen)
+    const totalQuestionSteps = 9; // Steps 1 to 9 (10 is success)
+    let loadingTimer = null;
 
     // DOM Elements
     const backBtn = document.getElementById('backBtn');
     const progressWrapper = document.getElementById('progressWrapper');
     const progressBarFill = document.getElementById('progressBarFill');
 
-    // Step Elements array
+    // Step Elements
     const steps = [
         document.getElementById('step0'),
         document.getElementById('step1'),
@@ -53,6 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
             backBtn.style.display = 'none';
             progressWrapper.style.display = 'block';
             progressBarFill.style.width = '10%';
+        } else if (currentStep === 8) {
+            // Loading Screen Step 8
+            backBtn.style.display = 'none';
+            progressWrapper.style.display = 'block';
+            progressBarFill.style.width = '90%';
+            startLoadingAnimation();
         } else if (currentStep === 10) {
             backBtn.style.display = 'none';
             progressWrapper.style.display = 'none';
@@ -60,12 +66,37 @@ document.addEventListener('DOMContentLoaded', () => {
             backBtn.style.display = 'flex';
             progressWrapper.style.display = 'block';
             
-            // Calculate progress percentage (Step 1 = 20%, ..., Step 9 = 100%)
-            const percentage = 10 + (currentStep / totalSteps) * 90;
+            // Calculate progress percentage
+            const percentage = 10 + (currentStep / totalQuestionSteps) * 90;
             progressBarFill.style.width = `${Math.min(percentage, 100)}%`;
         }
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Step 8 Loading Animation
+    function startLoadingAnimation() {
+        const loadingBarFill = document.getElementById('loadingBarFill');
+        const loadingPercentText = document.getElementById('loadingPercentText');
+        
+        let progress = 0;
+        if (loadingTimer) clearInterval(loadingTimer);
+
+        loadingBarFill.style.width = '0%';
+        loadingPercentText.textContent = '0%';
+
+        loadingTimer = setInterval(() => {
+            progress += Math.floor(Math.random() * 5) + 2;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(loadingTimer);
+                setTimeout(() => {
+                    goToStep(9);
+                }, 400);
+            }
+            loadingBarFill.style.width = `${progress}%`;
+            loadingPercentText.textContent = `${progress}%`;
+        }, 60);
     }
 
     // Step 0: Start Button
@@ -75,13 +106,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Back Button Click Handler
     backBtn.addEventListener('click', () => {
-        if (currentStep > 0 && currentStep <= totalSteps) {
+        if (currentStep > 0 && currentStep <= 7) {
             goToStep(currentStep - 1);
+        } else if (currentStep === 9) {
+            goToStep(7);
         }
     });
 
     // Step 1: Gênero Cards
-    document.querySelectorAll('.gender-card').forEach(card => {
+    document.querySelectorAll('#step1 .gender-card').forEach(card => {
         card.addEventListener('click', () => {
             formData.gender = card.dataset.gender;
             goToStep(2);
@@ -93,7 +126,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnStep2Next = document.getElementById('btnStep2Next');
 
     if (inputBirthDate) {
-        // Mask DD/MM/AA
         inputBirthDate.addEventListener('input', (e) => {
             let value = e.target.value.replace(/\D/g, '');
             if (value.length > 6) value = value.slice(0, 6);
@@ -132,11 +164,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Step 4: Quantos anos contribuiu
-    const inputContributionYears = document.getElementById('inputContributionYears');
-    const btnStep4Next = document.getElementById('btnStep4Next');
+    // Step 4: Forma de Trabalho
+    document.querySelectorAll('#step4 .option-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            formData.workType = btn.dataset.work;
+            goToStep(5);
+        });
+    });
 
-    btnStep4Next.addEventListener('click', () => {
+    // Step 5: Quantos anos contribuiu
+    const inputContributionYears = document.getElementById('inputContributionYears');
+    const btnStep5Next = document.getElementById('btnStep5Next');
+
+    btnStep5Next.addEventListener('click', () => {
         const yearsVal = inputContributionYears.value.trim();
         if (yearsVal === '') {
             alert('Por favor, informe os anos de contribuição (ou uma estimativa).');
@@ -144,22 +184,16 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         formData.contributionYears = yearsVal;
-        goToStep(5);
+        goToStep(6);
     });
 
-    inputContributionYears.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            btnStep4Next.click();
-        }
-    });
-
-    // Step 5: Forma de Trabalho
-    document.querySelectorAll('#step5 .option-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            formData.workType = btn.dataset.work;
-            goToStep(6);
+    if (inputContributionYears) {
+        inputContributionYears.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                btnStep5Next.click();
+            }
         });
-    });
+    }
 
     // Step 6: Atividade Especial
     document.querySelectorAll('#step6 .option-btn').forEach(btn => {
@@ -169,19 +203,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Step 7: Quanto Ganha
+    // Step 7: Tentou Aposentar Antes
     document.querySelectorAll('#step7 .option-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            formData.income = btn.dataset.income;
-            goToStep(8);
-        });
-    });
-
-    // Step 8: Tentou Aposentar Antes
-    document.querySelectorAll('#step8 .option-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
             formData.previousAttempt = btn.dataset.attempt;
-            goToStep(9);
+            // Go to Loading screen (Step 8)
+            goToStep(8);
         });
     });
 
@@ -191,19 +218,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputPhone = document.getElementById('inputPhone');
 
     // Phone formatting mask helper
-    inputPhone.addEventListener('input', (e) => {
-        let value = e.target.value.replace(/\D/g, '');
-        if (value.length > 11) value = value.slice(0, 11);
-        
-        if (value.length > 6) {
-            value = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7)}`;
-        } else if (value.length > 2) {
-            value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
-        } else if (value.length > 0) {
-            value = `(${value}`;
-        }
-        e.target.value = value;
-    });
+    if (inputPhone) {
+        inputPhone.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.slice(0, 11);
+            
+            if (value.length > 6) {
+                value = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7)}`;
+            } else if (value.length > 2) {
+                value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
+            } else if (value.length > 0) {
+                value = `(${value}`;
+            }
+            e.target.value = value;
+        });
+    }
 
     btnSubmitLead.addEventListener('click', (e) => {
         e.preventDefault();
@@ -225,17 +254,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         console.log('Dados Finais Coletados:', formData);
         
-        // Advance to Success Screen
+        // Advance to Success Screen (Step 10)
         goToStep(10);
     });
 
     // Step 10: Restart Form
     document.getElementById('btnRestart').addEventListener('click', () => {
-        // Reset inputs
         if (inputBirthDate) inputBirthDate.value = '';
-        inputContributionYears.value = '';
-        inputName.value = '';
-        inputPhone.value = '';
+        if (inputContributionYears) inputContributionYears.value = '';
+        if (inputName) inputName.value = '';
+        if (inputPhone) inputPhone.value = '';
 
         Object.keys(formData).forEach(key => formData[key] = '');
 
