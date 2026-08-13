@@ -207,9 +207,9 @@ html, body {
 
 .main-banner-img {
     width: 100%;
-    height: auto;
-    max-height: none;
-    object-fit: contain;
+    height: 270px;
+    object-fit: cover;
+    object-position: center 30%;
     border-radius: var(--radius-md);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
@@ -222,9 +222,9 @@ html, body {
 
 .final-banner-img {
     width: 100%;
-    height: auto;
-    max-height: none;
-    object-fit: contain;
+    height: 220px;
+    object-fit: cover;
+    object-position: center 30%;
     border-radius: var(--radius-md);
     margin-bottom: 16px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
