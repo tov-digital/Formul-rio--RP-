@@ -125,14 +125,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Step 2: Data de Nascimento (DD/MM/AA)
+    // Step 2: Data de Nascimento (DD/MM/AAAA)
     const inputBirthDate = document.getElementById('inputBirthDate');
     const btnStep2Next = document.getElementById('btnStep2Next');
 
     if (inputBirthDate) {
         inputBirthDate.addEventListener('input', (e) => {
             let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 6) value = value.slice(0, 6);
+            if (value.length > 8) value = value.slice(0, 8);
 
             if (value.length > 4) {
                 value = `${value.slice(0, 2)}/${value.slice(2, 4)}/${value.slice(4)}`;
@@ -151,8 +151,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnStep2Next.addEventListener('click', () => {
         const dateVal = inputBirthDate ? inputBirthDate.value.trim() : '';
-        if (!dateVal || dateVal.length < 8) {
-            alert('Por favor, informe sua data de nascimento completa (DD/MM/AA).');
+        if (!dateVal || dateVal.length < 10) {
+            alert('Por favor, informe sua data de nascimento completa (DD/MM/AAAA).');
             if (inputBirthDate) inputBirthDate.focus();
             return;
         }
