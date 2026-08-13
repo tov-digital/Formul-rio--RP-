@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Webhook Endpoint
+    const WEBHOOK_URL = 'https://n8n.srv1077266.hstgr.cloud/webhook/resolveprev-form';
+
     // Form Data State
     const formData = {
         gender: '',
@@ -116,7 +119,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Step 1: Gênero Cards
     document.querySelectorAll('#step1 .gender-card').forEach(card => {
         card.addEventListener('click', () => {
-            formData.gender = card.dataset.gender;
+            const genderValue = card.dataset.gender;
+            formData.gender = genderValue === 'mulher' ? 'Mulher' : 'Homem';
             goToStep(2);
         });
     });
@@ -159,7 +163,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Step 3: INSS Options
     document.querySelectorAll('#step3 .option-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            formData.inssContribution = btn.dataset.inss;
+            const labelText = btn.querySelector('.option-label')?.textContent.trim() || btn.dataset.inss;
+            formData.inssContribution = labelText;
             goToStep(4);
         });
     });
@@ -167,7 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Step 4: Forma de Trabalho
     document.querySelectorAll('#step4 .option-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            formData.workType = btn.dataset.work;
+            const labelText = btn.querySelector('.option-label')?.textContent.trim() || btn.dataset.work;
+            formData.workType = labelText;
             goToStep(5);
         });
     });
@@ -198,7 +204,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Step 6: Atividade Especial
     document.querySelectorAll('#step6 .option-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            formData.specialActivity = btn.dataset.special;
+            const labelText = btn.querySelector('.option-label')?.textContent.trim() || btn.dataset.special;
+            formData.specialActivity = labelText;
             goToStep(7);
         });
     });
@@ -206,13 +213,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Step 7: Tentou Aposentar Antes
     document.querySelectorAll('#step7 .option-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            formData.previousAttempt = btn.dataset.attempt;
+            const labelText = btn.querySelector('.option-label')?.textContent.trim() || btn.dataset.attempt;
+            formData.previousAttempt = labelText;
             // Go to Loading screen (Step 8)
             goToStep(8);
         });
     });
 
-    // Step 9: Final Lead Form
+    // Step 9: Final Lead Form Submission via Webhook
     const btnSubmitLead = document.getElementById('btnSubmitLead');
     const inputName = document.getElementById('inputName');
     const inputPhone = document.getElementById('inputPhone');
@@ -234,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    btnSubmitLead.addEventListener('click', (e) => {
+    btnSubmitLead.addEventListener('click', async (e) => {
         e.preventDefault();
         
         if (!inputName.value.trim()) {
@@ -252,10 +260,43 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.name = inputName.value.trim();
         formData.phone = inputPhone.value.trim();
 
-        console.log('Dados Finais Coletados:', formData);
-        
-        // Advance to Success Screen (Step 10)
-        goToStep(10);
+        // UI Loading Feedback
+        btnSubmitLead.disabled = true;
+        const originalBtnText = btnSubmitLead.textContent;
+        btnSubmitLead.textContent = 'ENVIANDO...';
+
+        // Prepare Webhook Payload
+        const payload = {
+            nome: formData.name,
+            whatsapp: formData.phone,
+            genero: formData.gender,
+            data_nascimento: formData.birthDate,
+            contribuiu_inss: formData.inssContribution,
+            forma_trabalho: formData.workType,
+            anos_contribuicao: formData.contributionYears,
+            atividade_especial: formData.specialActivity,
+            tentou_aposentar_antes: formData.previousAttempt,
+            data_envio: new Date().toISOString()
+        };
+
+        console.log('Enviando dados para o Webhook:', payload);
+
+        try {
+            await fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+        } catch (error) {
+            console.error('Erro ao enviar dados para o Webhook:', error);
+        } finally {
+            btnSubmitLead.disabled = false;
+            btnSubmitLead.textContent = originalBtnText;
+            // Advance to Success Screen (Step 10)
+            goToStep(10);
+        }
     });
 
     // Step 10: Restart Form
