@@ -49,16 +49,20 @@ document.addEventListener('DOMContentLoaded', () => {
         steps[currentStep].classList.add('active');
 
         // Update header & progress bar
-        if (currentStep === 0 || currentStep === 10) {
+        if (currentStep === 0) {
+            backBtn.style.display = 'none';
+            progressWrapper.style.display = 'block';
+            progressBarFill.style.width = '10%';
+        } else if (currentStep === 10) {
             backBtn.style.display = 'none';
             progressWrapper.style.display = 'none';
         } else {
             backBtn.style.display = 'flex';
             progressWrapper.style.display = 'block';
             
-            // Calculate progress percentage
-            const percentage = Math.min((currentStep / totalSteps) * 100, 100);
-            progressBarFill.style.width = `${percentage}%`;
+            // Calculate progress percentage (Step 1 = 20%, ..., Step 9 = 100%)
+            const percentage = 10 + (currentStep / totalSteps) * 90;
+            progressBarFill.style.width = `${Math.min(percentage, 100)}%`;
         }
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
