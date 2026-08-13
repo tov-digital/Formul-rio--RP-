@@ -80,11 +80,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Step 1: Idade
-    const inputAge = document.getElementById('inputAge');
-    const btnStep1Next = document.getElementById('btnStep1Next');
+    // Step 1: Gênero Cards
+    document.querySelectorAll('.gender-card').forEach(card => {
+        card.addEventListener('click', () => {
+            formData.gender = card.dataset.gender;
+            goToStep(2);
+        });
+    });
 
-    btnStep1Next.addEventListener('click', () => {
+    // Step 2: Idade
+    const inputAge = document.getElementById('inputAge');
+    const btnStep2Next = document.getElementById('btnStep2Next');
+
+    btnStep2Next.addEventListener('click', () => {
         const ageVal = inputAge.value.trim();
         if (!ageVal) {
             alert('Por favor, informe sua idade.');
@@ -92,21 +100,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         formData.age = ageVal;
-        goToStep(2);
+        goToStep(3);
     });
 
     inputAge.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
-            btnStep1Next.click();
+            btnStep2Next.click();
         }
-    });
-
-    // Step 2: Gênero Cards
-    document.querySelectorAll('.gender-card').forEach(card => {
-        card.addEventListener('click', () => {
-            formData.gender = card.dataset.gender;
-            goToStep(3);
-        });
     });
 
     // Step 3: INSS Options
