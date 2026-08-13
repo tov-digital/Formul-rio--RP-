@@ -205,10 +205,27 @@ html, body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
+.main-banner-img {
+    width: 100%;
+    max-height: 320px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
 .final-banner {
     height: 240px;
     margin-bottom: 16px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.final-banner-img {
+    width: 100%;
+    max-height: 240px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .placeholder-content {
