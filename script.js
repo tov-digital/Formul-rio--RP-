@@ -182,6 +182,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputContributionYears = document.getElementById('inputContributionYears');
     const btnStep5Next = document.getElementById('btnStep5Next');
 
+    if (inputContributionYears) {
+        inputContributionYears.addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/\D/g, '');
+        });
+
+        inputContributionYears.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                btnStep5Next.click();
+            }
+        });
+    }
+
     btnStep5Next.addEventListener('click', () => {
         const yearsVal = inputContributionYears.value.trim();
         if (yearsVal === '') {
@@ -192,14 +204,6 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.contributionYears = yearsVal;
         goToStep(6);
     });
-
-    if (inputContributionYears) {
-        inputContributionYears.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                btnStep5Next.click();
-            }
-        });
-    }
 
     // Step 6: Atividade Especial
     document.querySelectorAll('#step6 .option-btn').forEach(btn => {
